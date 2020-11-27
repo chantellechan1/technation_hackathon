@@ -1,5 +1,9 @@
 # virtual environment on local machine
 twitter-scraper-env/
+pgadmin4/
+
+# vscode
+*.code-workspace
 
 # secret keys
 secrets.py
