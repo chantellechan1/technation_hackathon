@@ -42,6 +42,12 @@ def close_db_connection(cursor, conn):
     cursor.close()
     conn.close()
 
+def push_analytics_to_db(analytics):
+
+    # ran out of time to implement this functionality
+    # for now, save to local file
+    with open('analytics.json', 'w') as data_file:
+        json.dump(analytics, data_file)
 
 def fetch_tweets(index, max_tweets, cursor):
     # index supplied will be used to return tweets greater that the given index (used as id)
@@ -76,7 +82,7 @@ def all_tweets_avg_sentiment(cursor, az_client):
     }
     
     for i in range(100):
-        print('running loop {} out of 100'.format(i))
+        print('processing: {}%'.format(i))
         db_index = 3993+i*10
         tweets = fetch_tweets(db_index, 10, cursor)
 
@@ -104,11 +110,14 @@ def all_tweets_avg_sentiment(cursor, az_client):
     print("Neutral mode: {}".format(Counter(sentiments['neutral']).most_common(2)))
     print("Negative mode: {}".format(Counter(sentiments['negative']).most_common(2)))
 
-    # print("Postive mode: {}".format(statistics.mode(sentiments['positive'])))
-    # print("Neutral mode: {}".format(statistics.mode(sentiments['neutral'])))
-    # print("Negative mode: {}".format(statistics.mode(sentiments['negative'])))
-
-    
+    return {
+        "sentiments": sentiments,
+        "averages": {
+            "positive": sum(sentiments['positive'])/len(sentiments['positive']),
+            "neutral": sum(sentiments['neutral'])/len(sentiments['neutral']),
+            "negative": sum(sentiments['negative'])/len(sentiments['negative'])
+        }
+    }
 
 def main():
     # set up db connection
@@ -119,7 +128,10 @@ def main():
     # set up azure connection
     az_client = azure_authenticate_client()
 
-    all_tweets_avg_sentiment(cursor, az_client)
+    analtyics = all_tweets_avg_sentiment(cursor, az_client)
+
+    # add analysis to db
+    push_analytics_to_db(analtyics)
 
     # clean up
     close_db_connection(cursor, connection)
