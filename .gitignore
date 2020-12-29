@@ -8,6 +8,9 @@ pgadmin4/
 # secret keys
 secrets.py
 
+# nodejs stuff for API
+api/node_modules/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

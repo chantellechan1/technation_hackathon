@@ -15,13 +15,41 @@ pip install requirements.txt
 ```
 
 ## Usage
+Prior to running either script or proceeding any further, please create a file called `secrets.py` and fill in all credentials and keys (template provided below).  
+
 If using a virtual environment (recommended) first create and activate it by running:
 ```bash
 python3 -m venv <virtual environment name>
 source <virtual environment name>/bin/activate
 ```
 
-Tweet collection occurs by running `python main.py`. This script will store tweets, named entities for the tweets, and tweet hashtags in a Postgres database. For our purposes, we used Azure Database for PostgreSQL. Sentiment analysis will give the average sentiment and confidence levels for each tweet, which will be output as an aggregate (in our case, it will be a Canadian national average). Sentiment analysis occurs by running `python analytics.py`. Prior to running either script, please fill in all necessary credentials and keys in `secrets.py`.
+To begin tweet collection, run the following: `python main.py`  
+* This script will store tweets, named entities for the tweets, and tweet hashtags in a Postgres database. For our purposes, we used Azure Database for PostgreSQL.   
+  
+To run sentiment analysis, run: `python analytics.py`  
+* Sentiment analysis will give the average sentiment and confidence levels for each tweet, which will be output as an aggregate (in our case, it will be a Canadian national average).
+
+### Secrets Template
+```python
+# Twitter Labs Keys
+API_KEY = ""
+API_KEY_SECRET = ""
+BEARER_TOKEN = ""
+
+# PostgreSQL DB Details
+DB_SECRETS = {
+    "host": "",
+    "dbname": "",
+    "user": "",
+    "password": "",
+    "sslmode": ""
+}
+
+AZURE_SERCRETS = {
+    "endpoint": "",
+    "key": ""
+}
+```
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
